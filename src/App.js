@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { Segment } from 'semantic-ui-react'
+import { ToastContainer } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
+
+import Rotas from './Rotas'
 
 function App() {
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+          <Rotas />
+
+          <ToastContainer />
+
+          <div style={{marginTop: '4%'}}>
+            <Segment vertical color='grey' size='tiny' textAlign='center'>
+              &copy; 2023 - Projeto WEB 4 - IFPE Jaboatão dos Guararapes
+            </Segment>
+          </div>
+
+      </div>
   );
+
 }
 
 export default App;
