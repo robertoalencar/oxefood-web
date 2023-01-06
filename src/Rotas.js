@@ -2,21 +2,20 @@ import React from 'react'
 
 import { BrowserRouter, Routes, Route} from 'react-router-dom'
 
+import Home from './views/Home/Home'
+import PageCliente from './views/Cliente/PageCliente'
 import FormCliente from './views/Cliente/FormCliente'
 
 function Rotas() {
     return (
+        <>
 
-        <BrowserRouter>
+            <Route path="/" exact render={() => <Home/>} />
 
-            <Routes>
+            <Route path="/page-cliente" exact render={() => <PageCliente/> }/>
+            <Route path="/form-cliente" exact render={() => <FormCliente/> }/>
 
-                <Route path="/" element={<FormCliente />} />
-
-            </Routes>
-
-        </BrowserRouter>
-
+        </>
     )
 }
 

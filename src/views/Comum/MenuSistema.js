@@ -21,7 +21,7 @@ class MenuSistema extends React.Component {
                 <Menu.Item 
                     icon={this.state.icon}
                     as={Link} 
-                    to='/home'
+                    to='/'
                     content='OxeFood' 
                 />
 
