@@ -1,7 +1,8 @@
 import React from "react";
 import axios from 'axios'
 import MenuSistema from '../Comum/MenuSistema'
-import { Container, Divider, Table, Button } from 'semantic-ui-react'
+import { URL_API } from '../Comum/Constantes'
+import { Container, Divider, Table, Button, Modal, Header, Icon } from 'semantic-ui-react'
 import { toast } from 'react-toastify'
 import { withRouter } from 'react-router-dom'
 
@@ -10,17 +11,15 @@ class PageCliente extends React.Component{
 	state = {
 
         items: [],
-        idCliente: ''
+        idCliente: '',
+
+        openModal: false,
+        idRemover: ''
 	}
 
 	componentDidMount = () => {
 		
-        axios.get("http://localhost:8081/api/cliente")
-        .then((response) => {
-            this.setState({
-                items: response.data
-            })
-        })
+        this.carregarLista();
 	}
 
     novo = () => {
@@ -30,6 +29,66 @@ class PageCliente extends React.Component{
             state: { idCliente: '' }
         })
 	}
+
+    abrirAlterar = (id) => {
+
+        this.props.history.push({
+            pathname: '/form-cliente',
+            state: { idCliente: id}
+        })
+    };
+
+    confirmaRemover = (id) => {
+
+        this.setState({ 
+            openModal: true,
+            idRemover: id
+        })
+    };
+
+    remover = async () => {
+
+        await axios.delete(URL_API + "/api/cliente/" + this.state.idRemover)
+    
+        .then((response) => {
+
+            this.notify("Cliente excluído com sucesso.")
+    
+            this.setState({
+                openModal: false
+            })
+    
+            this.carregarLista();
+    
+        })
+        .catch((error) => {
+
+            this.notify(error.response.data.message)
+    
+            this.setState({
+                openModal: false
+            })
+        })
+    };
+
+    carregarLista = () => {
+
+      axios.get(URL_API + "/api/cliente")
+        .then((response) => {
+            this.setState({
+                items: response.data
+            })
+        })
+
+    };
+
+    setOpenModal = (val) => {
+
+        this.setState({ 
+            openModal: val
+        })
+    
+    };
 
 	notify = (mensagem) => toast(mensagem)
 
@@ -43,7 +102,7 @@ class PageCliente extends React.Component{
 
 					<Container textAlign='justified' >
 
-						<h2>Listagem Cliente</h2>
+						<h2>Cliente</h2>
 						<Divider />
 
 						<div style={{marginTop: '4%'}}>
@@ -111,6 +170,27 @@ class PageCliente extends React.Component{
 						</div>
 					</Container>
 				</div>
+
+                <Modal
+                    basic
+                    onClose={() => this.setOpenModal(false)}
+                    onOpen={() => this.setOpenModal(true)}
+                    open={this.state.openModal}
+                    >
+                    <Header icon>
+                        <Icon name='trash' />
+                        <div style={{marginTop: '5%'}}> Tem certeza que deseja remover esse registro? </div>
+                    </Header>
+                    <Modal.Actions>
+                        <Button basic color='red' inverted onClick={() => this.setOpenModal(false)}>
+                            <Icon name='remove' /> Não
+                        </Button>
+                        <Button color='green' inverted onClick={() => this.remover()}>
+                            <Icon name='checkmark' /> Sim
+                        </Button>
+                    </Modal.Actions>
+                </Modal>
+                    
 			</div>
 		)
 	}

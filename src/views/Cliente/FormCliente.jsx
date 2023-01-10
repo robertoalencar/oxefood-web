@@ -1,45 +1,104 @@
 import React from "react";
 import axios from 'axios'
 import MenuSistema from '../Comum/MenuSistema'
-import { Container, Divider, Form } from 'semantic-ui-react'
+import { URL_API } from '../Comum/Constantes'
+import { Container, Form, Button, Icon, Divider } from 'semantic-ui-react'
 import InputMask from 'react-input-mask';
 import { toast } from 'react-toastify'
+import { withRouter } from 'react-router-dom'
 
 class FormCliente extends React.Component{
 
 	state = {
 
+		idCliente: '',
 		email: '',
 		password: '',
 		nome: '',
 		cpf: '',
 		fone: '',
-		foneAlternativo: ''
+		foneAlternativo: '',
+
+		ehAlteracao: false
 	}
 
 	componentDidMount = () => {
+
+		if (this.props.location.state != null && this.props.location.state.idCliente !== '') {
 		
+			axios.get(URL_API + "/api/cliente/"+this.props.location.state.idCliente)
+      		.then( response => {
+
+        		this.setState({
+					ehAlteracao: true,
+					idCliente: this.props.location.state.idCliente,
+					email: response.data.usuario.username,
+					nome: response.data.nome,
+					cpf: response.data.cpf,
+					fone: response.data.fone,
+					foneAlternativo: response.data.foneAlternativo
+        		})
+
+      		})
+		}
 	}
 
 	salvar = () => {
-
-		let clienteRequest = {
-			chaveEmpresa: '123',
-			email: this.state.email,
-			password:  this.state.password,
-			nome:  this.state.nome,
-			cpf:  this.state.cpf,
-			fone:  this.state.fone,
-			foneAlternativo:  this.state.foneAlternativo
+		
+		if (this.state.ehAlteracao === false) {
+			this.cadastrar();
+		} else {
+			this.alterar();
 		}
-	
-		axios.post("http://localhost:8081/api/cliente", clienteRequest)
-		.then((response) => {
-			this.notify("Cliente cadastrado com sucesso.")
-		})
-		.catch((error) => {
-			this.notify(error.response.data.message)
-		})
+	}
+
+	cadastrar = () => {
+
+		if (this.state.email !== '' && this.state.password !== '' && this.state.nome !== '') {
+
+			let clienteRequest = {
+				email: this.state.email,
+				password:  this.state.password,
+				nome:  this.state.nome,
+				cpf:  this.state.cpf,
+				fone:  this.state.fone,
+				foneAlternativo:  this.state.foneAlternativo
+			}
+		
+			axios.post(URL_API + "/api/cliente", clienteRequest)
+			.then((response) => {
+				this.notify("Cliente cadastrado com sucesso.")
+			})
+			.catch((error) => {
+				this.notify(error.response.data.message)
+			})
+		}
+	}
+
+	alterar = () => {
+
+		if (this.state.email !== '' && this.state.nome !== '') {
+
+			let clienteRequest = {
+				email: this.state.email,
+				nome:  this.state.nome,
+				cpf:  this.state.cpf,
+				fone:  this.state.fone,
+				foneAlternativo:  this.state.foneAlternativo
+			}
+		
+			axios.put(URL_API + "/api/cliente/" + this.state.idCliente, clienteRequest)
+			.then((response) => {
+				this.notify("Cliente atualizado com sucesso.")
+			})
+			.catch((error) => {
+				this.notify(error.response.data.message)
+			})
+		}
+	}
+
+	listar = () => {
+		this.props.history.push('/page-cliente')
 	}
 
 	notify = (mensagem) => toast(mensagem)
@@ -54,7 +113,13 @@ class FormCliente extends React.Component{
 
 					<Container textAlign='justified' >
 
-						<h2>Cadastro Cliente</h2>
+						{ this.state.ehAlteracao === false && 
+							<h2> <span style={{color: 'darkgray'}}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro </h2>
+						}
+						{ this.state.ehAlteracao === true && 
+							<h2> <span style={{color: 'darkgray'}}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração </h2>
+						}
+
 						<Divider />
 
 						<div style={{marginTop: '4%'}}>
@@ -74,26 +139,42 @@ class FormCliente extends React.Component{
 										maxLength="100"
 									/>
 
-									<Form.Input
-										required
-										fluid
-										icon='lock'
-										iconPosition='left'
-										type='password'
-										label='Senha'
-										value={this.state.password}
-										onChange={e => this.setState({password: e.target.value})}
-										maxLength="100"
-									/>
+									{ this.state.ehAlteracao === false && 
+										<Form.Input
+											required
+											fluid
+											icon='lock'
+											iconPosition='left'
+											type='password'
+											label='Senha'
+											value={this.state.password}
+											onChange={e => this.setState({password: e.target.value})}
+											maxLength="100"
+										/>
+									}
+									{ this.state.ehAlteracao === true && 
+										<Form.Input
+											disabled
+											fluid
+											icon='lock'
+											iconPosition='left'
+											type='password'
+											label='Senha'
+											value={this.state.password}
+											onChange={e => this.setState({password: e.target.value})}
+											maxLength="100"
+										/>
+									}
 
 								</Form.Group>
 
 								<Form.Group widths='equal'>
 
 									<Form.Input
+										required
 										fluid
 										label='Nome'
-										value={this.state.nome} 
+										value={this.state.nome}
 										onChange={e => this.setState({nome: e.target.value})} 
 										maxLength="100"
 									/>
@@ -131,23 +212,41 @@ class FormCliente extends React.Component{
 
 								</Form.Group>
 
-
 								<Form.Group widths='equal' style={{marginTop: '4%'}}  className='form--empresa-salvar'>
 
+									<Button
+										type="button"
+										inverted
+										circular
+										icon
+										labelPosition='left'
+										color='orange'
+										onClick={this.listar}
+										>
+										<Icon name='reply' />
+										Voltar
+									</Button>
+
 									<Container textAlign='right'>
-										<Form.Button 
+										
+										<Button
+											inverted
 											circular
-											color='orange' 
-											icon='save' 
+											icon
+											labelPosition='left'
+											color='blue'
+											floated='right'
 											onClick={this.salvar}
-											content='Salvar'
-										/>
+										>
+											<Icon name='save' />
+											Salvar
+										</Button>
+										
 									</Container>
 
 								</Form.Group>
 
 							</Form>
-
 						</div>
 					</Container>
 				</div>
@@ -156,4 +255,4 @@ class FormCliente extends React.Component{
 	}
 }
 
-export default FormCliente;
+export default withRouter(FormCliente);

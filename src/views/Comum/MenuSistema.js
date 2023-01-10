@@ -29,16 +29,16 @@ class MenuSistema extends React.Component {
                     <Dropdown item text='Produto'>
                         <Dropdown.Menu>
                             <Dropdown.Item 
-                                icon='percent'
+                                icon='tags'
                                 text='Categoria' 
                                 as={Link} 
-                                to='/page-categoria'
+                                to=''
                             />
                             <Dropdown.Item 
-                                icon="ticket alternate"
+                                icon="utensils"
                                 text='Produto' 
                                 as={Link} 
-                                to='/page-produto' 
+                                to='' 
                             />
                         </Dropdown.Menu>
                     </Dropdown>
@@ -62,26 +62,26 @@ class MenuSistema extends React.Component {
                                 icon='user' 
                                 text='Editar Dados da Empresa' 
                                 as={Link}
-                                to='form-edit-empresa'
+                                to=''
                             />
                             <Dropdown.Item 
                                 icon='settings' 
                                 text='Configurações do Sistema' 
                                 as={Link}
-                                to='form-configuracao-sistema'
+                                to=''
                             />
                             <Dropdown.Item
                                 icon='info'
                                 text='Sobre o Sistema'
                                 as={Link} 
-                                to='/sobre'
+                                to=''
                             />
                             <Dropdown.Item 
                                 onClick={this.logout}
                                 icon='power off' 
                                 text='Sair' 
                                 as={Link} 
-                                to='/'
+                                to=''
                             />
                         </Dropdown.Menu>
                     </Dropdown>
