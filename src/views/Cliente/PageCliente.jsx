@@ -90,6 +90,21 @@ class PageCliente extends React.Component{
     
     };
 
+    formatarData = (dataHora) => {
+
+        console.log(dataHora)
+
+        let data = new Date(dataHora);
+        let dia = data.getDate() < 10 ? "0" + data.getDate() : data.getDate();
+        let mes = (data.getMonth() + 1) < 10 ? "0" + (data.getMonth() + 1) : (data.getMonth() + 1);
+        let horas = data.getHours() < 10 ? "0" + data.getHours() : data.getHours();
+        let minutos = data.getMinutes() < 10 ? "0" + data.getMinutes() : data.getMinutes();
+        let segundos = data.getSeconds() < 10 ? "0" + data.getSeconds() : data.getSeconds();
+        let dataFormatada = dia + "/" + mes + "/" + data.getFullYear() + ' às ' + horas+ ':' + minutos + ':' + segundos; 
+        
+        return dataFormatada
+    };
+
 	notify = (mensagem) => toast(mensagem)
 
 	render(){
@@ -141,7 +156,7 @@ class PageCliente extends React.Component{
                                         <Table.Cell>{cliente.nome}</Table.Cell>
                                         <Table.Cell>{cliente.usuario.username}</Table.Cell>
                                         <Table.Cell>{cliente.cpf}</Table.Cell>
-                                        <Table.Cell>{cliente.dataNascimento}</Table.Cell>
+                                        <Table.Cell>{this.formatarData(cliente.dataNascimento)}</Table.Cell>
                                         <Table.Cell>{cliente.fone}</Table.Cell>
                                         <Table.Cell>{cliente.foneAlternativo}</Table.Cell>
                                         <Table.Cell textAlign='center'>

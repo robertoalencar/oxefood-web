@@ -18,6 +18,7 @@ class FormCliente extends React.Component{
 		cpf: '',
 		fone: '',
 		foneAlternativo: '',
+		dataNascimento: '',
 
 		ehAlteracao: false
 	}
@@ -36,9 +37,9 @@ class FormCliente extends React.Component{
 					nome: response.data.nome,
 					cpf: response.data.cpf,
 					fone: response.data.fone,
-					foneAlternativo: response.data.foneAlternativo
+					foneAlternativo: response.data.foneAlternativo,
+					dataNascimento: response.data.dataNascimento
         		})
-
       		})
 		}
 	}
@@ -62,7 +63,8 @@ class FormCliente extends React.Component{
 				nome:  this.state.nome,
 				cpf:  this.state.cpf,
 				fone:  this.state.fone,
-				foneAlternativo:  this.state.foneAlternativo
+				foneAlternativo:  this.state.foneAlternativo,
+				dataNascimento: this.state.dataNascimento
 			}
 		
 			axios.post(URL_API + "/api/cliente", clienteRequest)
@@ -84,7 +86,8 @@ class FormCliente extends React.Component{
 				nome:  this.state.nome,
 				cpf:  this.state.cpf,
 				fone:  this.state.fone,
-				foneAlternativo:  this.state.foneAlternativo
+				foneAlternativo:  this.state.foneAlternativo,
+				dataNascimento: this.state.dataNascimento
 			}
 		
 			axios.put(URL_API + "/api/cliente/" + this.state.idCliente, clienteRequest)
@@ -211,6 +214,20 @@ class FormCliente extends React.Component{
 									</Form.Input>
 
 								</Form.Group>
+
+								<Form.Input
+									fluid
+									label='Data Nascimento'
+									width={3}
+								>
+									<InputMask 
+										mask="99/99/9999" 
+										maskChar={null}
+										placeholder="Ex: 20/03/1985"
+										value={this.state.dataNascimento} 
+										onChange={(e) => {this.setState({dataNascimento: e.target.value})}} 
+									/> 
+								</Form.Input>
 
 								<Form.Group widths='equal' style={{marginTop: '4%'}}  className='form--empresa-salvar'>
 
