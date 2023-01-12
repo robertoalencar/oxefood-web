@@ -1,6 +1,7 @@
 import React from "react";
 import MenuSistema from '../Comum/MenuSistema'
-import { Container, Form, Header, Image, Segment, Grid } from 'semantic-ui-react'
+import { Container, Image, Grid } from 'semantic-ui-react'
+import { withRouter } from 'react-router-dom'
 
 class Home extends React.Component{
 
@@ -38,4 +39,4 @@ class Home extends React.Component{
 	}
 }
 
-export default Home;
+export default withRouter(Home);

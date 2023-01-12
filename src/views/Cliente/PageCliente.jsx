@@ -97,10 +97,7 @@ class PageCliente extends React.Component{
         let data = new Date(dataHora);
         let dia = data.getDate() < 10 ? "0" + data.getDate() : data.getDate();
         let mes = (data.getMonth() + 1) < 10 ? "0" + (data.getMonth() + 1) : (data.getMonth() + 1);
-        let horas = data.getHours() < 10 ? "0" + data.getHours() : data.getHours();
-        let minutos = data.getMinutes() < 10 ? "0" + data.getMinutes() : data.getMinutes();
-        let segundos = data.getSeconds() < 10 ? "0" + data.getSeconds() : data.getSeconds();
-        let dataFormatada = dia + "/" + mes + "/" + data.getFullYear() + ' às ' + horas+ ':' + minutos + ':' + segundos; 
+        let dataFormatada = dia + "/" + mes + "/" + data.getFullYear(); 
         
         return dataFormatada
     };

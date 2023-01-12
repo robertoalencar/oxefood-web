@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, Dropdown } from 'semantic-ui-react'
+import AuthenticationService from '../Comum/AuthenticationService'
 
 class MenuSistema extends React.Component {
 
@@ -12,6 +13,11 @@ class MenuSistema extends React.Component {
         
     }
 
+    logout = () => {
+
+        AuthenticationService.logout();
+    }
+
     render() {
 
         return (
@@ -21,7 +27,7 @@ class MenuSistema extends React.Component {
                 <Menu.Item 
                     icon={this.state.icon}
                     as={Link} 
-                    to='/'
+                    to='/home'
                     content='OxeFood' 
                 />
 
